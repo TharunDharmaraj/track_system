@@ -19,7 +19,7 @@ const serviceAccount = require("./track_System_firebase_adminsdk.json"); // Repl
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://employeemonitoring-eca95-default-rtdb.firebaseio.com/", // Replace with your Firebase Realtime Database URL
+  databaseURL: "https://employeemonitoring-eca95-default-rtdb.firebaseio.com/",
 });
 const db = admin.database();
 const ref = db.ref("/times"); // Replace with your database path
@@ -30,15 +30,15 @@ const ref = db.ref("/times"); // Replace with your database path
 
 function getCurrentDate() {
   let date = new Date().toLocaleDateString("en-IN");
-  return date
+  return date;
 }
 
 function getCurrentTime() {
   const date = new Date();
-  var ISToffSet = 330; //IST is 5:30; i.e. 60*5+30 = 330 in minutes 
+  var ISToffSet = 330; //IST is 5:30; i.e. 60*5+30 = 330 in minutes
   offset = ISToffSet * 60 * 1000;
   var ISTTime = new Date(date.getTime() + offset);
-  return (ISTTime).toJSON().substring(11, 19)
+  return ISTTime.toJSON().substring(11, 19);
 }
 
 function setEntryTime() {
@@ -52,8 +52,8 @@ function setEntryTime() {
       status: 1,
     },
   };
-  startTime = data[systemName].start_time
-  console.log(startTime)
+  startTime = data[systemName].start_time;
+  console.log(startTime);
 
   ref.update(data, (error) => {
     if (error) {
@@ -75,8 +75,8 @@ function setEndTime() {
       status: 0,
     },
   };
-  endTime = data[systemName].end_time
-  console.log(endTime)
+  endTime = data[systemName].end_time;
+  console.log(endTime);
 
   ref.update(data, (error) => {
     if (error) {
@@ -84,7 +84,7 @@ function setEndTime() {
     } else {
       console.log("Data saved successfully.");
     }
-  })
+  });
 }
 
 function setCurrentTime() {
@@ -102,7 +102,7 @@ function setCurrentTime() {
     } else {
       console.log("Data saved successfully.");
     }
-  })
+  });
 }
 
 setInterval(setCurrentTime, 5000);
@@ -110,7 +110,7 @@ setInterval(setCurrentTime, 5000);
 setEntryTime();
 
 function createTray() {
-  const icon = "D:\\Projects\\track_system\\track_system-win32-x64\\resources\\app\\track_system.png"; // required.
+  const icon = "/home/tharun/Documents/track_system/track_system.png"; // required.
   const trayicon = nativeImage.createFromPath(icon);
   tray = new Tray(trayicon.resize({ width: 106 }));
   const contextMenu = Menu.buildFromTemplate([
@@ -120,7 +120,7 @@ function createTray() {
         createWindow();
       },
     },
-  ]);
+  ]); 
   tray.setContextMenu(contextMenu);
 }
 
@@ -140,17 +140,17 @@ function createWindow() {
     skipTaskbar: false,
   });
 
-  mainwindow.loadFile("index.html");
+  mainwindow.loadURL("https://smart-lab-gamma.vercel.app");
   mainwindow.on("closed", function () {
     mainwindow = null;
   });
 }
 
 app.on("ready", () => {
-  createWindow()
+  createWindow();
   let autoLaunch = new AutoLaunch({
-    name: 'Track System',
-    path: app.getPath('exe'),
+    name: "Track System",
+    path: app.getPath("exe"),
   });
   autoLaunch.isEnabled().then((isEnabled) => {
     if (!isEnabled) autoLaunch.enable();
@@ -158,12 +158,11 @@ app.on("ready", () => {
 });
 
 app.on("before-quit", () => {
-  setEndTime()
+  setEndTime();
 });
 
-app.on("window-all-closed", () => {
-});
+app.on("window-all-closed", () => {});
 
-process.on('exit', function () {
+process.on("exit", function () {
   setEndTime();
 });
