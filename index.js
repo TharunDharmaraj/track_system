@@ -136,11 +136,11 @@ function createWindow() {
     frame: true,
     title: "Dashboard",
     fullscreen: false,
-    autoHideMenuBar: false,
+    autoHideMenuBar: true,
     skipTaskbar: false,
   });
 
-  mainwindow.loadURL("https://smart-lab-gamma.vercel.app");
+  mainwindow.loadURL("https://smart-lab-landing-page.20it112-thiruma.repl.co/");
   mainwindow.on("closed", function () {
     mainwindow = null;
   });
